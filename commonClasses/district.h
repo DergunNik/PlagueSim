@@ -10,7 +10,8 @@ enum DistrictType
 {
     WORK = 0,
     RECREATION,
-    HOME
+    HOME,
+    HOSPITAL
 };
 
 

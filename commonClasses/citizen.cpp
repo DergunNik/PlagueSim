@@ -22,7 +22,7 @@ void Citizen::getVaccinated()
 void Citizen::update()
 {
     if (!_isVaccinated && _responsibility != IRRESPONSIBLE && !_hasSyptoms &&
-        QRandomGenerator::global()->bounded(1.0f) < VACCINATION_PROBABILITY) {
+        QRandomGenerator::global()->bounded(1.0F) < VACCINATION_PROBABILITY) {
         getVaccinated();
     }
 
@@ -83,6 +83,9 @@ void Citizen::goTo(int time)
     if (aimDistr != nullptr && _isAlive) {
         if ((_hasSyptoms && _responsibility != IRRESPONSIBLE) || _isOnSelfIsolation) {
             aimDistr = _schedule.home();
+        }
+        if (_isInHospital) {
+            aimDistr = _schedule.hospital();
         }
 
         aimDistr->addCitizen(this);
@@ -223,4 +226,14 @@ bool Citizen::isOnSelfIsolation() const
 void Citizen::setIsOnSelfIsolation(bool newIsOnSelfIsolation)
 {
     _isOnSelfIsolation = newIsOnSelfIsolation;
+}
+
+bool Citizen::isInHospital() const
+{
+    return _isInHospital;
+}
+
+void Citizen::setIsInHospital(bool newIsInHospital)
+{
+    _isInHospital = newIsInHospital;
 }

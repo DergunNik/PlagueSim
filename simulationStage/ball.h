@@ -10,9 +10,15 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
+
 QPointF normalize(QPointF v);
 float dist(QPointF a, QPointF b);
 float scalar(QPointF a, QPointF b);
+
+
+const float DEFAULT_VELOCITY = 10;
+const ushort MS_IN_SEC = 1000;
+
 
 class Ball : public QGraphicsItem
 {
@@ -20,7 +26,7 @@ class Ball : public QGraphicsItem
     QPointF _vel = {0, 0};
     QRectF _rect;
     QVector<Ball*> _vec = {};
-    float _basicVel = 10;
+    float _basicVel = DEFAULT_VELOCITY;
     float _rad = 0;
 
 public:

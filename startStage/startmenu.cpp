@@ -41,6 +41,7 @@ StartSettings StartMenu::fetchData()
     settings.disease = disease;
     settings.districtsNumber = ui->districtsSB->value();
     settings.populationNumber = ui->citezensSB->value();
+    settings.clinicCapacity = ui->clinicSB->value();
     settings.initialVaccination = ui->vaccineDSB->value();
     settings.responsiblePercent = ui->respDSB->value();
     settings.semiresponsiblePercent = ui->semirespDSB->value();

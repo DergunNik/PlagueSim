@@ -21,6 +21,7 @@ struct StartSettings
     float irresponsiblePercent;
     uint districtsNumber;
     uint populationNumber;
+    uint clinicCapacity;
     Disease disease;
 };
 

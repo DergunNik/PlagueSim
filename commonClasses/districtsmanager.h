@@ -8,7 +8,7 @@
 
 
 const float WORK_PERCENT_FOR_WORK = 0.7;
-
+const float HOSPITAL_PERCENT_FOR_WORK = 0.01;
 
 class DistrictsManager
 {
@@ -16,6 +16,7 @@ private:
     QVector<District> _homes = {};
     QVector<District> _works = {};
     QVector<District> _recreations = {};
+    QVector<District> _hospitals = {};
 
 public:
     DistrictsManager() = default;
@@ -24,6 +25,7 @@ public:
     District* getRandomDistrict();
     District* getRandomHome();
     District* getRandomWork();
+    District *getRandomHospital();
     District* getRandomForWork();
     District* getRandomRecreation();
     QVector<District*> getAllDistricts();

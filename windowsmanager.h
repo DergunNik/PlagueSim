@@ -24,7 +24,7 @@ public:
 private slots:
     void startSimulation();
     void endSimulation();
-
+    void resetSimulation();
 };
 
 #endif // WINDOWSMANAGER_H

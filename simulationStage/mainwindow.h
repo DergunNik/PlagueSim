@@ -12,6 +12,7 @@
 #include <QGraphicsView>
 #include <QLayout>
 #include <QMainWindow>
+
 #include <QTimer>
 
 
@@ -21,12 +22,13 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+
 const uint REQUIRED_TICKS = 1500;
 const uint8_t FPS = 30;
 const ushort BASIC_VELOCITY = 100;
 const ushort MAX_VALUE = 10;
 const ushort MIN_VALUE = 1;
-const ushort MS_IN_SEC = 1000;
+
 
 class MainWindow : public QMainWindow
 {

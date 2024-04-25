@@ -16,6 +16,7 @@ enum Responsibility
     RESPONSIBLE
 };
 
+
 const uint8_t AVERAGE_VAC_TIME = 3;
 const float VACCINATION_PROBABILITY = 0.02;
 const float VACCINATION_BOOST = 0.4;
@@ -39,6 +40,7 @@ private:
     bool _isCоntagious = false;
     bool _isWearingMask = false;
     bool _isOnSelfIsolation = false;
+    bool _isInHospital = false;
     uint _familyNumber = -1;
     Schedule _schedule;
     Disease* _disease = nullptr;
@@ -86,6 +88,8 @@ public:
     void setIsWearingMask(bool newIsWearingMask);
     bool isOnSelfIsolation() const;
     void setIsOnSelfIsolation(bool newIsOnSelfIsolation);
+    bool isInHospital() const;
+    void setIsInHospital(bool newIsInHospital);
 };
 
 #endif // CITIZEN_H

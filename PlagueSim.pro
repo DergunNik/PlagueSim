@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -43,6 +43,7 @@ HEADERS += \
     commonClasses/plaguebasics.h \
     commonClasses/schedule.h \
     commonClasses/statistics.h \
+    finalStage/movingaverage.h \
     finalStage/statwindow.h \
     #generations.h \
     #mainwindow.h \

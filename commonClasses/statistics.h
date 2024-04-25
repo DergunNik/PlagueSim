@@ -5,11 +5,24 @@
 
 struct CitySituation
 {
+    uint dead = 0;
     uint alive = 0;
     uint infected = 0;
     uint haveSymptoms = 0;
     uint contagious = 0;
     uint vaccinated = 0;
+    float immunity = 0;
+
+    CitySituation operator+(const CitySituation& other) const;
+    CitySituation operator-(const CitySituation& other) const;
+    CitySituation& operator+=(const CitySituation& other);
+    CitySituation& operator-=(const CitySituation& other);
+    CitySituation operator/(const uint value) const;
+    CitySituation operator*(const uint value) const;
+    CitySituation& operator/=(const uint value);
+    CitySituation& operator*=(const uint value);
+
+    uint operator[](const size_t i) const;
 };
 
 class Statistics

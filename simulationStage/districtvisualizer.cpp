@@ -46,6 +46,63 @@ QPointF DistrictVisualizer::randVect()
 }
 
 
+void DistrictVisualizer::initHome()
+{
+    QSet<uint> familiesMem;
+    for (auto now : _district->citizens()) {
+        familiesMem.insert(now->familyNumber());
+    }
+
+    const uint familyAmnt = familiesMem.size();
+    const uint matrixSize = qSqrt(familyAmnt) + 1;
+
+    float boxWidth = _districtWidth / matrixSize;
+    float boxHeight = _districtHeight / matrixSize;
+
+    uint lastFamily = -1;
+    uint boxCntr = -1;
+
+    QRectF lastBox(0, 0, boxWidth, boxHeight);
+
+    for (uint i = 0; i < _district->citizens().size(); ++i) {
+        if (_district->citizens().at(i)->familyNumber() != lastFamily) {
+            ++boxCntr;
+
+            lastBox = QRectF(boxWidth * (boxCntr / matrixSize) + SCENE_TAB,
+                             boxHeight * (boxCntr % matrixSize) + SCENE_TAB,
+                             boxWidth, boxHeight);
+            _scene->addRect(lastBox);
+
+            lastFamily = _district->citizens().at(i)->familyNumber();
+        }
+
+        QPointF startPos(QPointF(lastBox.x() + boxWidth / 2, lastBox.y() + boxHeight / 2) +
+                         randVect() * (CITIZEN_RADIUS * 2));
+        auto tempBall = new Ball(startPos, randVect(), CITIZEN_RADIUS, _district->citizens().at(i));
+
+        tempBall->setRect(QRectF(boxWidth * (boxCntr / matrixSize) + SCENE_TAB + CITIZEN_RADIUS,
+                                 boxHeight * (boxCntr % matrixSize) + SCENE_TAB + CITIZEN_RADIUS,
+                                 boxWidth - 2 * CITIZEN_RADIUS, boxHeight - 2 * CITIZEN_RADIUS));
+        _scene->addItem(tempBall);
+    }
+}
+
+void DistrictVisualizer::initNotHome(District *district)
+{
+    for (uint i = 0; i < _district->citizens().size(); ++i) {
+        QPointF startPos(((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i + BASE_TAB) % _districtWidth,
+                         ((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i + BASE_TAB) % _districtHeight);
+        auto tempBall = new Ball(startPos, randVect(), CITIZEN_RADIUS, _district->citizens().at(i));
+        if (district->type() == HOSPITAL) {
+            tempBall->setBasicVel(tempBall->basicVel() / HOSPITAL_SPEED_DECREASE);
+        }
+
+        tempBall->setRect(QRectF(SCENE_TAB + CITIZEN_RADIUS, SCENE_TAB + CITIZEN_RADIUS,
+                                 _districtWidth - 2 * CITIZEN_RADIUS, _districtHeight - 2 * CITIZEN_RADIUS));
+        _scene->addItem(tempBall);
+    }
+}
+
 void DistrictVisualizer::reset(District *district)
 {
     _district = district;
@@ -54,6 +111,7 @@ void DistrictVisualizer::reset(District *district)
     _scene->clear();
 
     QRectF _distRect(SCENE_TAB, SCENE_TAB, _districtWidth, _districtHeight);
+    _scene->setSceneRect(0, 0, _districtWidth + 2 * SCENE_TAB, _districtHeight + 2 * SCENE_TAB);
     _scene->addRect(_distRect);
 
     updateInfo();
@@ -63,53 +121,9 @@ void DistrictVisualizer::reset(District *district)
     }
 
     if (district->type() == HOME) {
-        QSet<uint> familiesMem;
-        for (auto now : _district->citizens()) {
-            familiesMem.insert(now->familyNumber());
-        }
-
-        const uint familyAmnt = familiesMem.size();
-        const uint matrixSize = qSqrt(familyAmnt) + 1;
-
-        ushort boxWidth = _districtWidth / matrixSize;
-        ushort boxHeight = _districtHeight / matrixSize;
-
-        uint lastFamily = -1;
-        uint boxCntr = -1;
-
-        QRectF lastBox(0, 0, boxWidth, boxHeight);
-
-        for (uint i = 0; i < _district->citizens().size(); ++i) {
-            if (_district->citizens().at(i)->familyNumber() != lastFamily) {
-                ++boxCntr;
-
-                lastBox = QRectF(boxWidth * (boxCntr / matrixSize) + SCENE_TAB,
-                                 boxHeight * (boxCntr % matrixSize) + SCENE_TAB,
-                                 boxWidth, boxHeight);
-                _scene->addRect(lastBox);
-
-                lastFamily = _district->citizens().at(i)->familyNumber();
-            }
-
-            QPointF startPos(QPointF(lastBox.x() + boxWidth / 2, lastBox.y() + boxHeight / 2) +
-                             randVect() * (CITIZEN_RADIUS * 2));
-            auto tempBall = new Ball(startPos, randVect(), CITIZEN_RADIUS, _district->citizens().at(i));
-
-            tempBall->setRect(QRectF(boxWidth * (boxCntr / matrixSize) + SCENE_TAB + CITIZEN_RADIUS,
-                                     boxHeight * (boxCntr % matrixSize) + SCENE_TAB + CITIZEN_RADIUS,
-                                     boxWidth - 2 * CITIZEN_RADIUS, boxHeight - 2 * CITIZEN_RADIUS));
-            _scene->addItem(tempBall);
-        }
+        initHome();
     } else {
-        for (uint i = 0; i < _district->citizens().size(); ++i) {
-            QPointF startPos(((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i + BASE_TAB) % _districtWidth,
-                             ((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i + BASE_TAB) % _districtHeight);
-            auto tempBall = new Ball(startPos, randVect(), CITIZEN_RADIUS, _district->citizens().at(i));
-
-            tempBall->setRect(QRectF(SCENE_TAB + CITIZEN_RADIUS, SCENE_TAB + CITIZEN_RADIUS,
-                                     _districtWidth - 2 * CITIZEN_RADIUS, _districtHeight - 2 * CITIZEN_RADIUS));
-            _scene->addItem(tempBall);
-        }
+        initNotHome(district);
     }
 }
 

@@ -1,4 +1,5 @@
 #include "generations.h"
+#include "startmenu.h"
 
 #include <cmath>
 
@@ -31,10 +32,13 @@ void GenHandler::generateDistricts()
     float size = NAN;
     uint i = 0;
 
-    for (; i < 3; ++i) {
+    for (; i < 4; ++i) {
         type = static_cast<DistrictType>(i);
         pos = QPair<uint8_t, uint8_t>(i / matrixSize, i % matrixSize);
         size = DISCRICT_MIN_SIZE + QRandomGenerator::global()->bounded(DISTRICT_DELTA);
+        if (i == static_cast<uint>(HOSPITAL)) {
+            size *= (1 + HOSPITAL_PERCENT_FOR_WORK + _settings.clinicCapacity / static_cast<float>(DISTRICT_CAPACITY)) / 2;
+        }
         _districts.emplaceBack(type, size, pos);
     }
 
@@ -96,7 +100,8 @@ void GenHandler::generateSchedules()
             lastHomeDistrict = _districtsManager.getRandomHome();
         }
         Schedule schedule(&_districtsManager, lastHomeDistrict,
-                          _districtsManager.getRandomForWork());
+                          _districtsManager.getRandomForWork(),
+                          _districtsManager.getRandomHospital());
         now.setSchedule(schedule);
     }
 }

@@ -36,7 +36,25 @@ void WindowsManager::startSimulation()
 void WindowsManager::endSimulation()
 {
     _statWindow = new StatWindow(_mainWindow->statistics(), _mainWindow->cityManager());
+    connect(_statWindow, &StatWindow::reset, this, &WindowsManager::resetSimulation);
     _statWindow->show();
     _mainWindow->hide();
     _mainWindow->setEnabled(true);
+}
+
+
+void WindowsManager::resetSimulation()
+{
+    if (_startMenu != nullptr) {
+        delete _startMenu;
+    }
+    if (_mainWindow != nullptr) {
+        delete _mainWindow;
+    }
+    if (_statWindow != nullptr) {
+        delete _statWindow;
+    }
+    _startMenu = new StartMenu();
+    connect(_startMenu, &StartMenu::startSimulation, this, &WindowsManager::startSimulation);
+    _startMenu->show();
 }

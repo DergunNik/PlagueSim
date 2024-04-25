@@ -30,6 +30,9 @@ void GraphicsDistrictItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
     case WORK:
         painter->drawRect(-_radius / 2, -_radius, _radius, _radius * 2);
         break;
+    case HOSPITAL:
+        painter->setBrush(QBrush(Qt::green));
+        painter->drawEllipse(boundingRect());
     default:
         painter->drawEllipse(boundingRect());
         break;

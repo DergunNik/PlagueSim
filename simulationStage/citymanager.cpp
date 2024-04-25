@@ -7,6 +7,28 @@ CityManager::CityManager(GenHandler &&genHandler) :
     _citizens(std::move(genHandler._citizens))
 {}
 
+
+uint CityManager::placesLeft()
+{
+    auto temp =  static_cast<long long>(_settings.clinicCapacity) - static_cast<long long>(_inHospital);
+    return (temp > 0 ? temp : 0);
+}
+
+
+void CityManager::takeHospitalPlace()
+{
+    ++_inHospital;
+}
+
+
+void CityManager::freeHospitalPlace()
+{
+    if(_inHospital != 0) {
+        --_inHospital;
+    }
+}
+
+
 // getters and setters
 QVector<Citizen>& CityManager::citizens()
 {

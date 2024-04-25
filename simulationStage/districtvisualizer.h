@@ -12,9 +12,9 @@ namespace Ui {
 class DistrictVisualizer;
 }
 
-
+const float HOSPITAL_SPEED_DECREASE = 3;
 const ushort CITIZEN_RADIUS = 10;
-const ushort CITIZEN_TAB = 10;
+const ushort CITIZEN_TAB = 30;
 const ushort HOME_RADIUS = 30;
 const ushort HOME_TAB = 30;
 const ushort SCENE_WIDTH = 1020;
@@ -35,6 +35,8 @@ private:
     QGraphicsScene* _scene;
     Ui::DistrictVisualizer *ui;
 
+    void initHome();
+
 public:
     explicit DistrictVisualizer(QWidget *parent = nullptr);
     explicit DistrictVisualizer(District* district, QWidget *parent = nullptr);
@@ -42,9 +44,12 @@ public:
 
     QPointF randVect();
     void moveAll(ushort _speedMult);
-    void reset(District* district);
+    void extracted(District *&district);
+    void reset(District *district);
     void update();
     void updateInfo();
+
+    void initNotHome(District *district);
 
 public slots:
     void backBtnClicked();

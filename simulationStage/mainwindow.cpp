@@ -49,7 +49,7 @@ MainWindow::MainWindow(GenHandler &&generator, QWidget *parent) :
     }
 
     _statistics = Statistics(&_cityManager->citizens());
-    _who = new WHO(&_statistics, &_cityManager->citizens(), this);
+    _who = new WHO(&_statistics, _cityManager, this);
     connect(_who, &WHO::news, this, &MainWindow::getNews);
 
     speedChanged();
@@ -90,17 +90,17 @@ void MainWindow::nextLoop()
 {
     _statistics.append();
     _who->checkState();
-    updateInfo();
 
     for (auto now : _cityManager->districtsManager().getAllDistricts()) {
         now->resetCitizens();
     }
 
     for (auto& now : _cityManager->citizens()) {
-        if (_halfdaysCntr % 2 == 0) {
-            now.update();
-        }
+        now.update();
+
+        WHO::toHospital(now, _cityManager);
         now.goTo(_halfdaysCntr);
+
     }
 
     _cityVisualizer->reset(_cityManager);
@@ -108,6 +108,8 @@ void MainWindow::nextLoop()
     for (auto now : _distrVis) {
         now->update();
     }
+
+    updateInfo();
 
     ++_halfdaysCntr;
     _tickCntr = 0;

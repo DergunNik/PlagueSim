@@ -12,10 +12,11 @@ private:
     DistrictsManager* _districtManager = nullptr;
     District* _home = nullptr;
     District* _work = nullptr;
+    District* _hospital = nullptr;
 
 public:
     Schedule() = default;
-    Schedule(DistrictsManager* districtManager, District* home = nullptr, District* work = nullptr);
+    Schedule(DistrictsManager* districtManager, District* home, District* work, District* hospital);
 
     District* goTo(uint time);
 
@@ -26,6 +27,8 @@ public:
     void setWork(District *newWork);
     DistrictsManager *districtManager() const;
     void setDistrictManager(DistrictsManager *newDistrictManager);
+    District *hospital() const;
+    void setHospital(District *newHospital);
 };
 
 #endif // SCHEDULE_H

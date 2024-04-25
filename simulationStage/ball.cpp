@@ -6,6 +6,9 @@ Ball::Ball(QPointF pos, QPointF vel, float rad, Citizen* citizen) :
 {
     setPos(pos);
     _basicVel *= citizen->sociability();
+    if (citizen->isInHospital()) {
+        _basicVel = 0;
+    }
 }
 
 
@@ -42,7 +45,7 @@ void Ball::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 QPointF Ball::predictMove(float delta)
 {
-    return pos() + _vel * delta / 1000;
+    return pos() + _vel * delta / MS_IN_SEC;
 }
 
 
@@ -56,7 +59,7 @@ void Ball::move(float delta)
     collide(_rect);
 
     _vel = normalize(_vel) * _basicVel;
-    setPos(pos() + _vel * delta / 1000);
+    setPos(pos() + _vel * delta / MS_IN_SEC);
 }
 
 

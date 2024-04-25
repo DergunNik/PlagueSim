@@ -3,8 +3,10 @@
 
 #include <statistics.h>
 #include <citymanager.h>
+#include <movingaverage.h>
 
 #include <QMainWindow>
+#include <QtCharts>
 
 
 namespace Ui {
@@ -16,13 +18,36 @@ class StatWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    QChart* _rawChart;
+    QChart* _refChart;
+    QChartView* _rawView;
+    QChartView* _refView;
+    QGridLayout* _layout;
+    QVector<CitySituation> _averagedData;
+    Ui::StatWindow *ui;
+    std::array<QLineSeries*, 7> _rawPoints;
+    std::array<QLineSeries*, 7> _refPoints;
+
 public:
     explicit StatWindow(QWidget *parent = nullptr);
     explicit StatWindow(Statistics* statistics, CityManager* manager, QWidget *parent = nullptr);
-    ~StatWindow();
+    ~StatWindow() override;
 
-private:
-    Ui::StatWindow *ui;
+private slots:
+    void on_aliveBoc_stateChanged(int arg1);
+    void on_deadBox_stateChanged(int arg1);
+    void on_healthyBox_stateChanged(int arg1);
+    void on_infectedBoc_stateChanged(int arg1);
+    void on_symptBox_stateChanged(int arg1);
+    void on_contBox_stateChanged(int arg1);
+    void on_immunityBox_stateChanged(int arg1);
+    void on_endBtn_clicked();
+    void on_resetBtn_clicked();
+
+signals:
+    void reset();
+
 };
 
 #endif // STATWINDOW_H

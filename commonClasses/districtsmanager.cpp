@@ -3,10 +3,6 @@
 
 DistrictsManager::DistrictsManager(QVector<District> commonVect)
 {
-    _homes.clear();
-    _works.clear();
-    _recreations.clear();
-
     for(auto& now : commonVect) {
         switch (now.type()) {
         case WORK:
@@ -18,20 +14,25 @@ DistrictsManager::DistrictsManager(QVector<District> commonVect)
         case HOME:
             _homes.push_back(now);
             break;
+        case HOSPITAL:
+            _hospitals.push_back(now);
+            break;
         }
     }
 }
 
 District *DistrictsManager::getRandomDistrict()
 {
-    uint sumSize = _homes.size() + _works.size() + _recreations.size();
+    uint sumSize = _homes.size() + _works.size() + _recreations.size() + _hospitals.size();
     uint index = QRandomGenerator::global()->bounded(sumSize);
     if (index < _homes.size()) {
         return &_homes[index];
-    } else if (index >= sumSize - _works.size()) {
-        return &_works[index - _homes.size() - _recreations.size()];
+    } else if (index < _homes.size() + _works.size()) {
+        return &_works[index - _homes.size()];
+    } else if (index < _homes.size() + _works.size() + _recreations.size()) {
+        return &_recreations[index - _homes.size() - _works.size()];
     } else {
-        return &_recreations[index - _homes.size()];
+        return &_hospitals[index - _homes.size() - _works.size() - _recreations.size()];
     }
 }
 
@@ -48,11 +49,19 @@ District* DistrictsManager::getRandomWork()
 }
 
 
+District *DistrictsManager::getRandomHospital()
+{
+    return &_hospitals[QRandomGenerator::global()->bounded(_hospitals.size())];
+}
+
+
 District *DistrictsManager::getRandomForWork()
 {
     float temp = QRandomGenerator::global()->bounded(1.0F);
     if (temp < WORK_PERCENT_FOR_WORK) {
         return getRandomWork();
+    } else if  (temp > 1.0F - HOSPITAL_PERCENT_FOR_WORK ) {
+        return getRandomHospital();
     } else {
         return getRandomRecreation();
     }
@@ -76,6 +85,9 @@ QVector<District*> DistrictsManager::getAllDistricts()
         retVec.push_back(&now);
     }
     for (auto& now : _recreations) {
+        retVec.push_back(&now);
+    }
+    for (auto& now : _hospitals) {
         retVec.push_back(&now);
     }
 

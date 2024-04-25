@@ -2,6 +2,7 @@
 #define WHO_H
 
 #include <statistics.h>
+#include <citymanager.h>
 
 #include <QObject>
 #include <QRandomGenerator>
@@ -21,19 +22,22 @@ class WHO : public QObject
     Q_OBJECT
 
 private:
+    bool _firstCase = false;
     bool _hands = false;
     bool _masks = false;
+    bool _firstDeath = false;
     bool _minimalContacts = false;
     bool _vaccination = false;
     bool _selfIsolation = false;
+    bool _hospitalIsFull = false;
     bool _halfIsInf = false;
     bool _everyIsInf = false;
     Statistics* _stat;
-    QVector<Citizen>* _citizens;
+    CityManager* _cityManager;
 
 public:
     explicit WHO(QObject *parent = nullptr);
-    WHO(Statistics* stat, QVector<Citizen>* citizens, QObject *parent = nullptr);
+    WHO(Statistics* stat, CityManager* cityManager, QObject *parent = nullptr);
 
     void checkState();
 
@@ -42,6 +46,7 @@ public:
     void provideVaccination();
     void provideSelfIsolation();
 
+    static void toHospital(Citizen& citizen, CityManager* cityManager);
 
 signals:
     void news(QString newsText);

@@ -2,10 +2,11 @@
 #include <districtsmanager.h>
 
 
-Schedule::Schedule(DistrictsManager *districtManager, District *home, District *work) :
+Schedule::Schedule(DistrictsManager* districtManager, District* home, District* work, District* hospital) :
     _districtManager(districtManager),
     _home(home),
-    _work(work)
+    _work(work),
+    _hospital(hospital)
 {}
 
 
@@ -60,4 +61,14 @@ DistrictsManager *Schedule::districtManager() const
 void Schedule::setDistrictManager(DistrictsManager *newDistrictManager)
 {
     _districtManager = newDistrictManager;
+}
+
+District *Schedule::hospital() const
+{
+    return _hospital;
+}
+
+void Schedule::setHospital(District *newHospital)
+{
+    _hospital = newHospital;
 }

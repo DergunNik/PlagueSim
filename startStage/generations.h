@@ -38,7 +38,7 @@ private:
 
 public:
     GenHandler() = default;
-    GenHandler(StartSettings settings);
+    explicit GenHandler(StartSettings settings);
 
     QVector<Citizen> citizens() const;
     DistrictsManager districtsManager() const;
