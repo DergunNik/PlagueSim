@@ -13,7 +13,7 @@ class CityVisualizer;
 }
 
 
-const ushort DISTRICT_RADIUS = 30;
+const ushort DISTRICT_RADIUS = 80;
 const ushort DISTRICT_TAB = 10;
 
 
@@ -32,6 +32,7 @@ public:
     ~CityVisualizer() override;
 
     void reset(CityManager* cManager);
+    void setDay(bool isDay);
 
 private slots:
     void selectedItem(ushort x, ushort y);

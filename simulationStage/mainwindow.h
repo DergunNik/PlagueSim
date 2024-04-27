@@ -25,7 +25,10 @@ QT_END_NAMESPACE
 
 const uint REQUIRED_TICKS = 1500;
 const uint8_t FPS = 30;
+const uint8_t PERCENTS = 100;
 const ushort BASIC_VELOCITY = 100;
+const ushort DAY = 12;
+const ushort HOUR = 60;
 const ushort MAX_VALUE = 10;
 const ushort MIN_VALUE = 1;
 
@@ -62,6 +65,7 @@ public slots:
     void tick();
     void getNews(QString news);
     void nextLoop();
+    void updateTime();
     void updateInfo();
     void mapSelected();
     void speedChanged();

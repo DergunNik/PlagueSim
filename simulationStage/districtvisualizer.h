@@ -13,6 +13,7 @@ class DistrictVisualizer;
 }
 
 const float HOSPITAL_SPEED_DECREASE = 3;
+const float HOME_SPEED_DECREASE = 1.5;
 const ushort CITIZEN_RADIUS = 10;
 const ushort CITIZEN_TAB = 30;
 const ushort HOME_RADIUS = 30;

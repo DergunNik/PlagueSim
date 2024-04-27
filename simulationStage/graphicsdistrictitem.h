@@ -7,6 +7,11 @@
 #include <QObject>
 #include <QPainter>
 
+
+const float STATUS_PERCENT_HEIGHT = 0.05F;
+const float NO_PEOPLE_IN_DISTRICT = 10.0F;
+
+
 class GraphicsDistrictItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT
@@ -17,7 +22,7 @@ private:
     float _infectedPercent = 0;
     ushort _radius;
 
-    float calcPercent(const CitizensProportion& prop);
+    void calcPercent(const CitizensProportion& prop);
 
 public:
     explicit GraphicsDistrictItem(const District& district, ushort radius);

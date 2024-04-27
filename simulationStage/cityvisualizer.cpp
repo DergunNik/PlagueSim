@@ -19,6 +19,7 @@ CityVisualizer::CityVisualizer(CityManager* cManager, QWidget *parent) :
     reset(cManager);
 
     ui->graphicsView->setScene(_scene);
+    ui->graphicsView->setBackgroundBrush(QBrush(QImage(":/nS")));
 }
 
 
@@ -38,6 +39,23 @@ void CityVisualizer::reset(CityManager* cManager)
                      item->ID().second * (DISTRICT_RADIUS * 2 + DISTRICT_TAB));
         _scene->addItem(item);
         connect(item, &GraphicsDistrictItem::selected, this, &CityVisualizer::selectedItem);
+    }
+}
+
+
+void CityVisualizer::setDay(bool isDay)
+{
+    if (isDay) {
+        ui->graphicsView->setBackgroundBrush(QBrush(QImage(":/dS")));
+        QPalette palette;
+        palette.setColor(QPalette::Window, QColor(70, 255, 0, 100));
+        qApp->setPalette(palette);
+    } else {
+        ui->graphicsView->setBackgroundBrush(QBrush(QImage(":/nS")));
+        QPalette palette;
+        palette.setColor(QPalette::Window, QColor(0, 255, 100, 50));
+        palette.setColor(QPalette::WindowText, Qt::white);
+        qApp->setPalette(palette);
     }
 }
 

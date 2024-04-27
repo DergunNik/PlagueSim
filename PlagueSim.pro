@@ -71,6 +71,9 @@ FORMS += \
     #startmenu.ui \
     #statwindow.ui
 
+RESOURCES += \
+    content.qrc
+
 INCLUDEPATH += \
     commonClasses/ \
     startStage/ \

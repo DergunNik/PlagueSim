@@ -18,23 +18,37 @@ QRectF GraphicsDistrictItem::boundingRect() const
 
 void GraphicsDistrictItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    QColor color;
-    color.setGreen(0);
-    color.setRed(255 * _infectedPercent);
-    color.setBlue(255 * (1 - _infectedPercent));
-    painter->setBrush(QBrush(color));
+    if (_infectedPercent > 2) {
+        painter->setBrush(QBrush(Qt::white));
+        painter->drawRect(boundingRect().x(),
+                          boundingRect().y() + boundingRect().height() * (1 - STATUS_PERCENT_HEIGHT),
+                          boundingRect().width(),
+                          boundingRect().height() * STATUS_PERCENT_HEIGHT);
+    } else {
+        painter->setBrush(QBrush(Qt::red));
+        painter->drawRect(boundingRect().x(),
+                          boundingRect().y() + boundingRect().height() * (1 - STATUS_PERCENT_HEIGHT),
+                          boundingRect().width() * _infectedPercent,
+                          boundingRect().height() * STATUS_PERCENT_HEIGHT);
+        painter->setBrush(QBrush(Qt::blue));
+        painter->drawRect(boundingRect().x() + boundingRect().width() * _infectedPercent,
+                          boundingRect().y() + boundingRect().height() * (1 - STATUS_PERCENT_HEIGHT),
+                          boundingRect().width() * (1 - _infectedPercent),
+                          boundingRect().height() * STATUS_PERCENT_HEIGHT);
+    }
+
     switch (_type) {
     case HOME:
-        painter->drawRect(boundingRect());
+        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/homeS"));
         break;
     case WORK:
-        painter->drawRect(-_radius / 2, -_radius, _radius, _radius * 2);
+        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/workS"));
         break;
     case HOSPITAL:
-        painter->setBrush(QBrush(Qt::green));
-        painter->drawEllipse(boundingRect());
+        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/hospS"));
+        break;
     default:
-        painter->drawEllipse(boundingRect());
+        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/recrS"));
         break;
     }
 }
@@ -47,14 +61,18 @@ void GraphicsDistrictItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
-float GraphicsDistrictItem::calcPercent(const CitizensProportion &prop)
+void GraphicsDistrictItem::calcPercent(const CitizensProportion &prop)
 {
-    auto tempProp = prop;
-    auto tempSum = tempProp.asymptomaticallyInf + tempProp.explicitlyInf + tempProp.notInfected;
+    if (prop.asymptomaticallyInf + prop.explicitlyInf + prop.notInfected == 0) {
+        _infectedPercent = NO_PEOPLE_IN_DISTRICT;
+        return;
+    }
+
+    auto tempSum = prop.asymptomaticallyInf + prop.explicitlyInf + prop.notInfected;
     if (tempSum == 0) {
         _infectedPercent = 0;
     } else {
-        _infectedPercent = static_cast<float>(tempSum - tempProp.notInfected) / (tempSum);
+        _infectedPercent = static_cast<float>(tempSum - prop.notInfected) / (tempSum);
     }
 }
 

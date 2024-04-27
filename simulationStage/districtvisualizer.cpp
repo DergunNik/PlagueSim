@@ -82,7 +82,9 @@ void DistrictVisualizer::initHome()
 
         tempBall->setRect(QRectF(boxWidth * (boxCntr / matrixSize) + SCENE_TAB + CITIZEN_RADIUS,
                                  boxHeight * (boxCntr % matrixSize) + SCENE_TAB + CITIZEN_RADIUS,
-                                 boxWidth - 2 * CITIZEN_RADIUS, boxHeight - 2 * CITIZEN_RADIUS));
+                                 boxWidth - 2 * CITIZEN_RADIUS, boxHeight - 2 * CITIZEN_RADIUS));        
+        tempBall->setBasicVel(tempBall->basicVel() / HOME_SPEED_DECREASE);
+
         _scene->addItem(tempBall);
     }
 }
@@ -90,8 +92,8 @@ void DistrictVisualizer::initHome()
 void DistrictVisualizer::initNotHome(District *district)
 {
     for (uint i = 0; i < _district->citizens().size(); ++i) {
-        QPointF startPos(((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i + BASE_TAB) % _districtWidth,
-                         ((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i + BASE_TAB) % _districtHeight);
+        QPointF startPos(((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i) % (_districtWidth - CITIZEN_TAB) + BASE_TAB,
+                         ((CITIZEN_TAB + 2 * CITIZEN_RADIUS) * i) % (_districtHeight - CITIZEN_TAB) + BASE_TAB);
         auto tempBall = new Ball(startPos, randVect(), CITIZEN_RADIUS, _district->citizens().at(i));
         if (district->type() == HOSPITAL) {
             tempBall->setBasicVel(tempBall->basicVel() / HOSPITAL_SPEED_DECREASE);

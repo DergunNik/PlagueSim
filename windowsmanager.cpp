@@ -37,6 +37,9 @@ void WindowsManager::endSimulation()
 {
     _statWindow = new StatWindow(_mainWindow->statistics(), _mainWindow->cityManager());
     connect(_statWindow, &StatWindow::reset, this, &WindowsManager::resetSimulation);
+    QPalette palette;
+    palette.setColor(QPalette::Window, QColor(0, 255, 100, 120));
+    qApp->setPalette(palette);
     _statWindow->show();
     _mainWindow->hide();
     _mainWindow->setEnabled(true);

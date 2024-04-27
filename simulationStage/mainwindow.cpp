@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::MainWindow(GenHandler &&generator, QWidget *parent) :
     _cityManager(new CityManager(std::move(generator))),
+    _cityVisualizer(new CityVisualizer(_cityManager, this)),
     _layout(new QGridLayout(this)),
     _timer(new QTimer(this)),
     ui(new Ui::MainWindow)
@@ -21,7 +22,6 @@ MainWindow::MainWindow(GenHandler &&generator, QWidget *parent) :
     connect(ui->continueCB, &QCheckBox::stateChanged, this, &MainWindow::pauseStateChanged);
     connect(ui->endBtn, &QPushButton::clicked, this, &MainWindow::endBtnClicked);
 
-    _cityVisualizer = new CityVisualizer(_cityManager, this);
     connect(_cityVisualizer, &CityVisualizer::selectedDistrict, this, &MainWindow::detrictSelected);
 
     _layout->addWidget(ui->statLbl, 0, 1);
@@ -72,6 +72,8 @@ void MainWindow::tick()
             now->moveAll(_tickValue * BASIC_VELOCITY);
         }
 
+        updateTime();
+
         _tickCntr += _tickValue;
         if (_tickCntr > REQUIRED_TICKS) {
             nextLoop();
@@ -88,6 +90,8 @@ void MainWindow::getNews(QString news)
 
 void MainWindow::nextLoop()
 {
+    _cityVisualizer->setDay(_halfdaysCntr % 2 == 1);
+
     _statistics.append();
     _who->checkState();
 
@@ -115,12 +119,23 @@ void MainWindow::nextLoop()
     _tickCntr = 0;
 }
 
+void MainWindow::updateTime()
+{
+    ushort minuts = (DAY * HOUR) * (static_cast<float>(_tickCntr) / REQUIRED_TICKS);
+    ushort hours = minuts / HOUR + (_halfdaysCntr % 2 == 0 ? DAY : 0);
+    minuts %= HOUR;
+    ui->timeLbl->setText(QString::number(hours) + QString(" часов, ") +
+                         QString::number(minuts) + QString("минут"));
+}
+
 
 void MainWindow::updateInfo()
 {
     float percent = static_cast<float>(_statistics.history().back().infected)
-                    / _cityManager->settings().populationNumber * 100   ;
-    ui->statLbl->setText(QString("Заражено: ") + QString::number(percent) + QString("%"));
+                    / _statistics.history().back().alive * PERCENTS;
+    ui->statLbl->setText(QString("Заражено: ") + QString::number(percent) + QString("%") +
+                         QString(_halfdaysCntr % 2 == 1 ? " к 12:00" : " к 00:00"));
+    ui->dayLbl->setText(QString("День ") + QString::number(_halfdaysCntr / 2 + 1));
 }
 
 

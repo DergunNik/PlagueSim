@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="icon">content/free-icon-coronavirus-4628987.png</file>
+        <file alias="workS">content/workS.png</file>
+        <file alias="homeS">content/homeS.png</file>
+        <file alias="hospS">content/hospS.png</file>
+        <file alias="recrS">content/recrS.png</file>
+        <file alias="dS">content/day2.jpg</file>
+        <file alias="nS">content/night2.jpg</file>
+    </qresource>
+</RCC>

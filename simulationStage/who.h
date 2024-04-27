@@ -14,7 +14,7 @@ const float MIN_CONT_LEVEL = 0.1;
 const float VACCINE_LEVEL = 0.2;
 const float ISOLATION_LEVEL = 0.3;
 const float HALF_LEVEL = 0.5;
-const float ONE_PRECISION = 1e-4;
+const float PRECISION = 1e-4;
 
 
 class WHO : public QObject
@@ -31,7 +31,10 @@ private:
     bool _selfIsolation = false;
     bool _hospitalIsFull = false;
     bool _halfIsInf = false;
+    bool _halfIsDead = false;
     bool _everyIsInf = false;
+    bool _end = false;
+    bool _allDead = false;
     Statistics* _stat;
     CityManager* _cityManager;
 

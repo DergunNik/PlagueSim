@@ -48,12 +48,27 @@ void WHO::checkState()
     }
     if (!_halfIsInf && percent > HALF_LEVEL) {
         _halfIsInf = true;
-        emit news(QString("Каждый второй в городе болен! \"Я здоров - а Вы?\" - спрашивают врачи."));
+        emit news(QString("Каждый второй в городе болен! \"Я здоров - а Вы?\" - спрашивает главврач больницы."));
     }
-    if (qAbs(1 - percent) <= ONE_PRECISION && !_everyIsInf) {
+    if (!_halfIsDead && state.dead > state.alive) {
+        _halfIsDead = true;
+        emit news(QString("Каждый второй в городе скончался из-за новой болезни. "
+                          "Да когда же это кончится?"));
+    }
+    if (qAbs(1 - percent) <= PRECISION && !_everyIsInf) {
         _everyIsInf = true;
         emit news(QString("\"Да не может каждый, вот прямо кажк-кх-кхех... "
                           "Извините, вот прямо каждый болеть. Не верю,\" - заявляет Мэр города."));
+    }
+    if (_firstCase && !_end && percent <= PRECISION && state.alive) {
+        _end = true;
+        emit news(QString("\"Ну вот и всё,\" - цитата Мэра. "
+                          "Город пережил очередную эпидемию."));
+    }
+    if (!_allDead && !state.alive) {
+        _allDead = true;
+        emit news(QString("С огорчением вынуждены сообщить, что последний житель Города только что умер."
+                          "На этом всё."));
     }
 }
 
