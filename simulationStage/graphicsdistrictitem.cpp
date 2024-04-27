@@ -7,6 +7,24 @@ GraphicsDistrictItem::GraphicsDistrictItem(const District& district, ushort radi
     _radius(radius)
 {
     calcPercent(district.proportion());
+
+    QString toolTip;
+    switch (_type) {
+    case HOME:
+        toolTip = "Жилой район";
+        break;
+    case WORK:
+        toolTip = "Рабочий район";
+        break;
+    case RECREATION:
+        toolTip = "Разлекательный район";
+        break;
+    case HOSPITAL:
+        toolTip = "Больница";
+        break;
+    }
+    toolTip += ". ID: " + QString::number(_pos.first) + "/" + QString::number(_pos.second);
+    setToolTip(toolTip);
 }
 
 

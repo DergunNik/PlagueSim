@@ -24,6 +24,7 @@ DistrictVisualizer::DistrictVisualizer(District* district, QWidget *parent) :
     reset(district);
 
     ui->graphicsView->setScene(_scene);
+    ui->idLbl->setText("ID: " + QString::number(_district->pos().first) + "/" + QString::number(_district->pos().second));
 }
 
 
