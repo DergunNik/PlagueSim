@@ -17,12 +17,12 @@ enum Responsibility
 };
 
 
-const uint8_t AVERAGE_VAC_TIME = 3;
-const float VACCINATION_PROBABILITY = 0.02;
+const uint8_t AVERAGE_VAC_TIME = 5;
+const float VACCINATION_PROBABILITY = 0.05;
 const float VACCINATION_BOOST = 0.4;
 const float RECOVERY_BOOST = 0.4;
-const float T_MIN_SIZE = 0.8;
-const float T_DELTA = 0.4;
+const ushort MIN_DELTA_HALFDAYS = 2;
+const float DELTA_PART = 0.25;
 const float MASK_PROTECTION = 0.1;
 
 
@@ -45,10 +45,10 @@ private:
     Schedule _schedule;
     Disease* _disease = nullptr;
 
-    int16_t _dayBeforeSyptoms = -1;
-    int16_t _dayBeforeСоntagious = -1;
-    int16_t _dayBeforeRecovery = -1;
-    int16_t _daysBeforeVacBoost = -1;
+    int16_t _halfdayBeforeSyptoms = -1;
+    int16_t _halfdayBeforeСоntagious = -1;
+    int16_t _halfdayBeforeRecovery = -1;
+    int16_t _halfdaysBeforeVacBoost = -1;
 
     void updateInfection();
     void recover();

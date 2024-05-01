@@ -55,18 +55,19 @@ void GraphicsDistrictItem::paint(QPainter *painter, const QStyleOptionGraphicsIt
                           boundingRect().height() * STATUS_PERCENT_HEIGHT);
     }
 
+    QRect imageRect = QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT));
     switch (_type) {
     case HOME:
-        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/homeS"));
+        painter->drawPixmap(imageRect, QPixmap(":/homeS"));
         break;
     case WORK:
-        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/workS"));
+        painter->drawPixmap(imageRect, QPixmap(":/workS"));
         break;
     case HOSPITAL:
-        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/hospS"));
+        painter->drawPixmap(imageRect, QPixmap(":/hospS"));
         break;
     default:
-        painter->drawPixmap(QRect(-_radius, -_radius, _radius * 2, _radius * 2 * (1 - STATUS_PERCENT_HEIGHT)), QPixmap(":/recrS"));
+        painter->drawPixmap(imageRect, QPixmap(":/recrS"));
         break;
     }
 }

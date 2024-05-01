@@ -7,5 +7,9 @@
         <file alias="recrS">content/recrS.png</file>
         <file alias="dS">content/day2.jpg</file>
         <file alias="nS">content/night2.jpg</file>
+        <file alias="vaccine">content/vaccine.png</file>
+        <file alias="distance">content/distance.png</file>
+        <file alias="isolation">content/isolation.png</file>
+        <file alias="masks">content/masks.png</file>
     </qresource>
 </RCC>

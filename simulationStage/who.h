@@ -3,6 +3,7 @@
 
 #include <statistics.h>
 #include <citymanager.h>
+#include <news.h>
 
 #include <QObject>
 #include <QRandomGenerator>

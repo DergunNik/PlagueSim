@@ -10,6 +10,24 @@
     <height>563</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -24,7 +42,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Новости: В городе всё спокойно.</string>
+     <string>Последние новости: В городе всё спокойно.</string>
     </property>
     <property name="readOnly">
      <bool>true</bool>
@@ -308,13 +326,13 @@
      <rect>
       <x>500</x>
       <y>30</y>
-      <width>120</width>
+      <width>220</width>
       <height>20</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>120</width>
+      <width>220</width>
       <height>0</height>
      </size>
     </property>
@@ -346,7 +364,7 @@
      </palette>
     </property>
     <property name="text">
-     <string>Заражено: 0%</string>
+     <string>СТАТИСТИКА</string>
     </property>
    </widget>
   </widget>

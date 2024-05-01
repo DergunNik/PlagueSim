@@ -23,7 +23,7 @@ MainWindow::MainWindow(GenHandler &&generator, QWidget *parent) :
     connect(ui->endBtn, &QPushButton::clicked, this, &MainWindow::endBtnClicked);
 
     connect(_cityVisualizer, &CityVisualizer::selectedDistrict, this, &MainWindow::detrictSelected);
-
+    
     _layout->addWidget(ui->statLbl, 0, 1);
     _layout->addWidget(_cityVisualizer, 1, 1, 1, 2);
     _layout->addWidget(ui->groupBox, 1, 0);
@@ -84,7 +84,11 @@ void MainWindow::tick()
 
 void MainWindow::getNews(QString news)
 {
-    ui->newsLineEdit->setText(QString("Новости: ") + news);
+    ui->newsLineEdit->setText(QString("Последние новости: ") + news);
+    if (news.back() == '!') {
+        _isPaused = true;
+        ui->continueCB->setChecked(false);
+    }
 }
 
 
@@ -131,10 +135,15 @@ void MainWindow::updateTime()
 
 void MainWindow::updateInfo()
 {
-    float percent = static_cast<float>(_statistics.history().back().infected)
-                    / _statistics.history().back().alive * PERCENTS;
-    ui->statLbl->setText(QString("Заражено: ") + QString::number(percent) + QString("%") +
+    float norm = _statistics.history().back().alive - _statistics.history().back().infected;
+    float inf = _statistics.history().back().infected;
+    float dead = _statistics.history().back().dead;
+
+    ui->statLbl->setText(QString("Здоровых: ") + QString::number(norm) +
+                         QString(", больных: ") + QString::number(inf) +
+                         QString(", мёртвых: ") + QString::number(dead) +
                          QString(_halfdaysCntr % 2 == 1 ? " к 12:00" : " к 00:00"));
+
     ui->dayLbl->setText(QString("День ") + QString::number(_halfdaysCntr / 2 + 1));
 }
 

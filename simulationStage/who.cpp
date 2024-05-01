@@ -31,7 +31,7 @@ void WHO::checkState()
     }
     if (!_firstDeath && state.dead) {
         _firstDeath = true;
-        emit news(QString("Сообщается о первой смерти от новой болезни. Врачи выражают обеспокоиность."));
+        emit news(QString("Сообщается о первой смерти от новой болезни. Врачи выражают обеспокенность."));
     }
     if (!_minimalContacts && percent > MIN_CONT_LEVEL) {
         provideMinimalContacts();
@@ -76,6 +76,11 @@ void WHO::checkState()
 void WHO::provideMasks()
 {
     _masks = true;
+    QString text = "Врачи указывают на растущие цифры заражённых новой болезнью,\n"
+                   "они рекомендуют носить медицинские маски, независимо от вашего самочуствия!";
+
+    News *dialog = new News(QPixmap(":/masks"), text);
+    dialog->show();
 
     for (auto& now : _cityManager->citizens()) {
         if (now.responsibility() == RESPONSIBLE) {
@@ -83,14 +88,18 @@ void WHO::provideMasks()
         }
     }
 
-    emit news(QString("Врачи указывают на растущие цифры заражённых новой болезнью,"
-                      " они рекомендуют носить медицинские маски, независимо от вашего самочуствия."));
+    emit news(text);
 }
 
 
 void WHO::provideMinimalContacts()
 {
     _minimalContacts = true;
+    QString text = "Врачи заявляют, что новой болезнью заражён каждый десятый житель города.\n"
+                   "Они настоятельно рекомендуют воздержаться от любых личных контактов или свести их к минимуму!";
+
+    News *dialog = new News(QPixmap(":/distance"), text);
+    dialog->show();
 
     for (auto& now : _cityManager->citizens()) {
         if (now.responsibility() == RESPONSIBLE) {
@@ -98,14 +107,19 @@ void WHO::provideMinimalContacts()
         }
     }
 
-    emit news(QString("Врачи заявляют, что новой болезнью заражён каждый десятый житель города. "
-                      "Они настоятельно рекомендуют воздержаться от любых личных контактов или свести их к минимуму."));
+    emit news(text);
 }
 
 
 void WHO::provideVaccination()
 {
     _vaccination = true;
+    QString text = "\"20% города жалуется на симптомы новой болезни,\" - заявляют медики.\n"
+                   "В связи с этим они призывают всех невакцинированных людей срочно это исправить,\n"
+                   "чтобы обезопасить свою жизнь и жизни близких!";
+
+    News *dialog = new News(QPixmap(":/vaccine"), text);
+    dialog->show();
 
     for (auto& now : _cityManager->citizens()) {
         if (now.responsibility() == RESPONSIBLE && !now.isVaccinated()) {
@@ -113,15 +127,18 @@ void WHO::provideVaccination()
         }
     }
 
-    emit news(QString("\"20% города жалуется на симптомы новой болезни,\" - заявляют медики. "
-                      "В связи с этим они призывают всех невакцинированных людей срочно это исправлять, "
-                      "чтобы обезопасить свою жизнь и жизни близких."));
+    emit news(text);
 }
 
 
 void WHO::provideSelfIsolation()
 {
     _selfIsolation = true;
+    QString text = "Как минимум каждый третий житель города заражён новой болезнью!\n"
+                   "Врачи призывают население к немедленной самоизоляции!";
+
+    News *dialog = new News(QPixmap(":/isolation"), text);
+    dialog->show();
 
     for (auto& now : _cityManager->citizens()) {
         if (now.responsibility() == RESPONSIBLE) {
@@ -129,14 +146,13 @@ void WHO::provideSelfIsolation()
         }
     }
 
-    emit news(QString("Как минимум каждый третий житель города заражён новой болезнью! "
-                      "Врачи призывают население к немедленной самоизоляции."));
+    emit news(text);
 }
 
 
 void WHO::toHospital(Citizen& citizen, CityManager* cityManager)
 {
-    if (citizen.hasSyptoms() && !citizen.isInHospital() && cityManager->placesLeft()) {
+    if (citizen.hasSyptoms() && citizen.responsibility() != IRRESPONSIBLE && !citizen.isInHospital() && cityManager->placesLeft()) {
         cityManager->takeHospitalPlace();
         citizen.setIsInHospital(true);
     } else if (!citizen.hasSyptoms() && citizen.isInHospital()) {

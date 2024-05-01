@@ -25,6 +25,7 @@ SOURCES += \
     simulationStage/districtvisualizer.cpp \
     simulationStage/graphicsdistrictitem.cpp \
     simulationStage/mainwindow.cpp \
+    simulationStage/news.cpp \
     simulationStage/who.cpp \
     startStage/generations.cpp \
     startStage/startmenu.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     simulationStage/districtvisualizer.h \
     simulationStage/graphicsdistrictitem.h \
     simulationStage/mainwindow.h \
+    simulationStage/news.h \
     simulationStage/who.h \
     startStage/generations.h \
     startStage/startmenu.h \
@@ -67,6 +69,7 @@ FORMS += \
     simulationStage/cityvisualizer.ui \
     simulationStage/districtvisualizer.ui \
     simulationStage/mainwindow.ui \
+    simulationStage/news.ui \
     startStage/startmenu.ui \
     #startmenu.ui \
     #statwindow.ui

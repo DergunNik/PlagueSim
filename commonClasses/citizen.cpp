@@ -15,7 +15,7 @@ Citizen::Citizen(float immunity, float physicalHealth, float sociability,
 void Citizen::getVaccinated()
 {
     _immunity /= 2;
-    _daysBeforeVacBoost = AVERAGE_VAC_TIME - 1 + QRandomGenerator::global()->bounded(3);
+    _halfdaysBeforeVacBoost = AVERAGE_VAC_TIME - 1 + QRandomGenerator::global()->bounded(3);
 }
 
 
@@ -26,16 +26,19 @@ void Citizen::update()
         getVaccinated();
     }
 
-    if (_dayBeforeSyptoms == 0) {
+    if (_halfdayBeforeSyptoms == 0) {
         _hasSyptoms = true;
     }
-    if (_dayBeforeСоntagious == 0) {
+    if (_halfdayBeforeСоntagious == 0) {
         _isCоntagious = true;
     }
-    if (_dayBeforeRecovery == 0) {
+    if (_halfdayBeforeRecovery == 0) {
         _isInfected = false;
         _hasSyptoms = false;
         _isCоntagious = false;
+
+        _halfdayBeforeSyptoms = -1;
+        _halfdayBeforeСоntagious = -1;
 
         if (QRandomGenerator::global()->bounded(_disease->lethality) > _physicalHealth) {
             _isAlive = false;
@@ -44,16 +47,16 @@ void Citizen::update()
             _immunity = normalize(_immunity);
         }
     }
-    if (_daysBeforeVacBoost == 0) {
+    if (_halfdaysBeforeVacBoost == 0) {
         _immunity *= 2;
         _immunity += VACCINATION_BOOST;
         _immunity = normalize(_immunity);
     }
 
-    _dayBeforeSyptoms -= (_dayBeforeSyptoms >= 0 ? 1 : 0);
-    _dayBeforeСоntagious -= (_dayBeforeСоntagious >= 0 ? 1 : 0);
-    _dayBeforeRecovery -= (_dayBeforeRecovery >= 0 ? 1 : 0);
-    _daysBeforeVacBoost -= (_daysBeforeVacBoost >= 0 ? 1 : 0);
+    _halfdayBeforeSyptoms -= (_halfdayBeforeSyptoms >= 0 ? 1 : 0);
+    _halfdayBeforeСоntagious -= (_halfdayBeforeСоntagious >= 0 ? 1 : 0);
+    _halfdayBeforeRecovery -= (_halfdayBeforeRecovery >= 0 ? 1 : 0);
+    _halfdaysBeforeVacBoost -= (_halfdaysBeforeVacBoost >= 0 ? 1 : 0);
 }
 
 
@@ -71,9 +74,9 @@ float Citizen::normalize(float value)
 void Citizen::makeZeroParient()
 {
     _isInfected = true;
-    _dayBeforeRecovery =  _disease->recoveryDays * (T_MIN_SIZE + T_DELTA);
-    _dayBeforeСоntagious = _disease->latentDays * (T_MIN_SIZE + T_DELTA);
-    _dayBeforeSyptoms = _disease->incubationDays * (T_MIN_SIZE + T_DELTA);
+    _halfdayBeforeRecovery =  _disease->recoveryDays * 2 + MIN_DELTA_HALFDAYS;
+    _halfdayBeforeСоntagious = (_disease->latentDays * 2 > MIN_DELTA_HALFDAYS ? _disease->latentDays * 2 - MIN_DELTA_HALFDAYS : 0);
+    _halfdayBeforeSyptoms = _disease->incubationDays * 2 + MIN_DELTA_HALFDAYS;
 }
 
 
@@ -98,20 +101,26 @@ void Citizen::getInfected(bool throuhgMask)
     if (QRandomGenerator::global()->bounded(1.0F) + throuhgMask * MASK_PROTECTION < _disease->contagiousness &&
         QRandomGenerator::global()->bounded(1.0F) > _immunity) {
         _isInfected = true;
-        _dayBeforeRecovery =  _disease->recoveryDays *
-                             (T_MIN_SIZE + QRandomGenerator::global()->bounded(T_DELTA));
-        if (_dayBeforeRecovery < 1 && _disease->recoveryDays > 0) {
-            _dayBeforeRecovery = 1;
+
+        ushort delta = qMax(MIN_DELTA_HALFDAYS, static_cast<ushort>(_disease->recoveryDays * 2 * DELTA_PART));
+        _halfdayBeforeRecovery =  _disease->recoveryDays * 2 +
+                             (QRandomGenerator::global()->bounded(delta * 2 + 1) - delta);
+        if (_halfdayBeforeRecovery < 1 && _disease->recoveryDays > 0) {
+            _halfdayBeforeRecovery = 1;
         }
-        _dayBeforeСоntagious = _disease->latentDays *
-                               (T_MIN_SIZE + QRandomGenerator::global()->bounded(T_DELTA));
-        if (_dayBeforeСоntagious < 1 && _disease->recoveryDays > 1 && _disease->latentDays > 0) {
-            _dayBeforeСоntagious = 1;
+
+        delta = qMax(MIN_DELTA_HALFDAYS, static_cast<ushort>(_disease->latentDays * 2 * DELTA_PART));
+        _halfdayBeforeСоntagious = _disease->latentDays * 2 +
+                               (QRandomGenerator::global()->bounded(delta * 2 + 1) - delta);
+        if (_halfdayBeforeСоntagious < 1 && _disease->recoveryDays > 1 && _disease->latentDays > 0) {
+            _halfdayBeforeСоntagious = 1;
         }
-        _dayBeforeSyptoms = _disease->incubationDays *
-                            (T_MIN_SIZE + QRandomGenerator::global()->bounded(T_DELTA));
-        if (_dayBeforeSyptoms < 1 && _disease->recoveryDays > 1 && _disease->incubationDays > 0) {
-            _dayBeforeSyptoms = 1;
+
+         delta = qMax(MIN_DELTA_HALFDAYS, static_cast<ushort>(_disease->incubationDays * 2 * DELTA_PART));
+        _halfdayBeforeSyptoms = _disease->incubationDays * 2 +
+                             (QRandomGenerator::global()->bounded(delta * 2 + 1) - delta);
+         if (_halfdayBeforeSyptoms < 1 && _disease->recoveryDays > 1 && _disease->incubationDays > 0) {
+            _halfdayBeforeSyptoms = 1;
         }
     }
 }

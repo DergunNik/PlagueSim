@@ -113,9 +113,9 @@ void DistrictVisualizer::reset(District *district)
     _districtHeight = (SCENE_HEIGHT - 2 * SCENE_TAB) * district->size();
     _scene->clear();
 
-    QRectF _distRect(SCENE_TAB, SCENE_TAB, _districtWidth, _districtHeight);
+    QRectF distRect(SCENE_TAB, SCENE_TAB, _districtWidth, _districtHeight);
     _scene->setSceneRect(0, 0, _districtWidth + 2 * SCENE_TAB, _districtHeight + 2 * SCENE_TAB);
-    _scene->addRect(_distRect);
+    _scene->addRect(distRect);
 
     updateInfo();
 
