@@ -12,8 +12,6 @@ private:
     std::deque<T> _tempData;
     T _total;
 
-    void refactorAll();
-
 public:
     explicit MovingAverage(ushort windowSize) : _windowSize(windowSize) {
         _total *= 0;

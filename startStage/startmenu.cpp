@@ -66,8 +66,10 @@ void StartMenu::on_districtsSB_valueChanged(int arg1)
 
 void StartMenu::on_recoverySB_valueChanged(int arg1)
 {
-    ui->incubationSB->setMaximum(fmax(arg1 * 0.8 - 1, 0)); // (... * 0.8 - 1) is necessery since arg1 is an average number of days
-    ui->latentSB->setMaximum(fmax(arg1 * 0.8 - 1, 0));
+    ushort delta = qMax(MIN_DELTA_HALFDAYS / 2U, static_cast<ushort>(arg1 * DELTA_PART));
+
+    ui->incubationSB->setMaximum(qMax(arg1 - delta, 0));
+    ui->latentSB->setMaximum(qMax(arg1 - delta, 0));
 }
 
 

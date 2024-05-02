@@ -11,7 +11,7 @@ StatWindow::StatWindow(QWidget *parent)
 StatWindow::StatWindow(Statistics *statistics, CityManager* manager, QWidget *parent) :
     StatWindow(parent)
 {
-    float t = 0.5;
+    float t = BASIC_X_AXIS_VALUE;
     MovingAverage<CitySituation> makeAverage(3);
 
     for (uint8_t i = 0; i < 7; ++i) {
@@ -22,9 +22,9 @@ StatWindow::StatWindow(Statistics *statistics, CityManager* manager, QWidget *pa
     for (auto now : statistics->history()) {
         _averagedData.push_back(makeAverage.addData(now));
 
-        for (uint8_t i = 0; i < 7; ++i) {
+        for (uint8_t i = 0; i < CHARTS_NUMBER; ++i) {
 
-            if (i == 5) {
+            if (i == HEALTHY_INDEX) {
                 _rawPoints[i]->append(t, now.alive - now.infected);
                 _refPoints[i]->append(t, _averagedData.back().alive - _averagedData.back().infected);
             } else {
@@ -33,7 +33,7 @@ StatWindow::StatWindow(Statistics *statistics, CityManager* manager, QWidget *pa
             }
         }
 
-        t += 0.5;
+        t += BASIC_X_AXIS_VALUE;
     }
 
     _rawChart = new QChart();
@@ -57,7 +57,7 @@ StatWindow::StatWindow(Statistics *statistics, CityManager* manager, QWidget *pa
     _refChart->addAxis(axisX1, Qt::AlignBottom);
     _refChart->addAxis(axisY1, Qt::AlignLeft);
 
-    for (uint8_t i = 0; i < 7; ++i) {
+    for (uint8_t i = 0; i < CHARTS_NUMBER; ++i) {
         _rawChart->addSeries(_rawPoints[i]);
         _refChart->addSeries(_refPoints[i]);
     }
@@ -65,7 +65,7 @@ StatWindow::StatWindow(Statistics *statistics, CityManager* manager, QWidget *pa
     _rawChart->createDefaultAxes();
     _refChart->createDefaultAxes();
 
-    for (uint8_t i = 0; i < 7; ++i) {
+    for (uint8_t i = 0; i < CHARTS_NUMBER; ++i) {
         _rawChart->addSeries(_rawPoints[i]);
         _refChart->addSeries(_refPoints[i]);
     }

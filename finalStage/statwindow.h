@@ -14,6 +14,11 @@ class StatWindow;
 }
 
 
+const uint8_t CHARTS_NUMBER = 7;
+const uint8_t HEALTHY_INDEX = 5;
+const float BASIC_X_AXIS_VALUE = 0.5;
+
+
 class StatWindow : public QMainWindow
 {
     Q_OBJECT
